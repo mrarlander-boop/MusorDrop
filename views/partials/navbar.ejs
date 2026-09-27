@@ -1,0 +1,63 @@
+<nav class="site-navbar">
+  <div class="nav-container">
+    <a href="/" class="brand-logo">
+      <div class="brand-cube">⛏</div>
+      <div>MINECRAFT <span class="highlight">SKINHUB</span></div>
+    </a>
+
+    <ul class="nav-links">
+      <li>
+        <a href="/" class="nav-link <%= currentPath === '/' ? 'active' : '' %>">
+          <span>🏠</span> Главная
+        </a>
+      </li>
+      <li>
+        <a href="/skins" class="nav-link <%= currentPath.startsWith('/skins') ? 'active' : '' %>">
+          <span>👕</span> Каталог скинов
+        </a>
+      </li>
+      <li>
+        <a href="/cases" class="nav-link <%= currentPath.startsWith('/cases') ? 'active' : '' %>">
+          <span>🎁</span> Кейсы
+        </a>
+      </li>
+      <li>
+        <a href="/blog" class="nav-link <%= currentPath.startsWith('/blog') ? 'active' : '' %>">
+          <span>📰</span> Блог
+        </a>
+      </li>
+      <% if (user && user.role === 'admin') { %>
+        <li>
+          <a href="/admin" class="nav-link <%= currentPath.startsWith('/admin') ? 'active' : '' %>" style="color: #c084fc;">
+            <span>⚡</span> Админ-панель
+          </a>
+        </li>
+      <% } %>
+    </ul>
+
+    <div class="nav-user-actions">
+      <% if (user) { %>
+        <!-- Баланс пользователя -->
+        <a href="/profile" class="user-balance-badge" title="Ваш баланс">
+          <span><%= user.balance %> 🟢</span>
+        </a>
+
+        <!-- Профиль -->
+        <a href="/profile" class="user-profile-btn">
+          <span>👤 <%= user.username %></span>
+          <% if (user.role === 'admin') { %>
+            <span class="admin-badge">Admin</span>
+          <% } %>
+        </a>
+
+        <!-- Выход -->
+        <a href="/logout" class="btn btn-secondary btn-sm" title="Выйти из аккаунта">
+          Выход
+        </a>
+      <% } else { %>
+        <a href="/login" class="btn btn-secondary btn-sm">Вход</a>
+        <a href="/register" class="btn btn-primary btn-sm">Регистрация</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

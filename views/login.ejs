@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <div class="form-card">
+    <div style="text-align:center; margin-bottom:25px;">
+      <div style="width:50px; height:50px; background:linear-gradient(135deg, #22c55e, #15803d); border-radius:12px; display:inline-flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:12px; box-shadow:var(--neon-green-glow);">
+        ⛏
+      </div>
+      <h1 style="font-size:1.8rem; font-weight:800; color:#fff;">Вход в аккаунт</h1>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">
+        Авторизуйтесь, чтобы покупать скины и открывать кейсы
+      </p>
+    </div>
+
+    <!-- ПОДСКАЗКА ДЛЯ ТЕСТИРОВАНИЯ -->
+    <div style="background:rgba(168, 85, 247, 0.1); border:1px solid rgba(168, 85, 247, 0.3); border-radius:10px; padding:14px; margin-bottom:24px; font-size:0.85rem; color:#d8b4fe;">
+      👑 <strong>Тестовый аккаунт администратора:</strong><br>
+      Логин: <code style="background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:4px; color:#fff;">admin</code> | 
+      Пароль: <code style="background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:4px; color:#fff;">admin</code>
+    </div>
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="username" class="form-label">Имя пользователя / Никнейм</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          class="form-control" 
+          required 
+          placeholder="Например, Steve или admin"
+          autocomplete="username"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Пароль</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          required 
+          placeholder="Введите пароль"
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:10px;">
+        Войти в аккаунт
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px; font-size:0.9rem; color:var(--text-muted);">
+      Ещё нет аккаунта? 
+      <a href="/register" style="color:var(--neon-green); font-weight:700; text-decoration:none;">Зарегистрироваться (+1000 🟢)</a>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

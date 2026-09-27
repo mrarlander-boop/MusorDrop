@@ -1,0 +1,111 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">
+        <span>🎁</span> Кейсы со скинами Minecraft
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-top:4px;">
+        Испытай удачу! Открывай кейсы с красивой рулеткой и получай скины прямиком в свой инвентарь.
+      </p>
+    </div>
+  </div>
+
+  <div class="cases-grid">
+    <% if (cases && cases.length > 0) { %>
+      <% cases.forEach(c => { %>
+        <div class="case-card">
+          <img src="<%= c.image_url %>" alt="<%= c.title %>" class="case-image" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop&q=80'">
+          
+          <h3 class="case-title"><%= c.title %></h3>
+          <p class="case-desc"><%= c.description %></p>
+
+          <div style="width:100%; text-align:left; margin-bottom:14px;">
+            <span style="font-size:0.8rem; color:var(--text-dim); text-transform:uppercase; font-weight:700;">
+              Возможный дроп:
+            </span>
+            <div class="case-preview-skins" style="margin-top:6px;">
+              <% if (c.possibleSkins && c.possibleSkins.length > 0) { %>
+                <% c.possibleSkins.forEach(skin => { %>
+                  <img src="<%= skin.image_url %>" alt="<%= skin.title %>" title="<%= skin.title %>" class="case-preview-thumb" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100&auto=format&fit=crop&q=80'">
+                <% }) %>
+              <% } else { %>
+                <span style="font-size:0.8rem; color:var(--text-dim);">Случайный скин из каталога</span>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="case-footer">
+            <div style="font-size:1.3rem; font-weight:900; color:#c084fc;">
+              <%= c.price %> 🟢
+            </div>
+
+            <% if (user) { %>
+              <button 
+                type="button" 
+                class="btn btn-purple" 
+                onclick="openCaseWithRoulette(<%= c.id %>, '<%= c.title %>', <%= c.price %>)"
+              >
+                🎰 Открыть кейс
+              </button>
+            <% } else { %>
+              <a href="/login" class="btn btn-secondary btn-sm">
+                Войдите для открытия
+              </a>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p style="color:var(--text-muted); grid-column:1/-1;">Кейсы пока не добавлены.</p>
+    <% } %>
+  </div>
+</main>
+
+<!-- МОДАЛЬНОЕ ОКНО РУЛЕТКИ -->
+<div id="rouletteModal" class="roulette-modal">
+  <div class="roulette-box">
+    <button type="button" onclick="closeRouletteModal()" style="position:absolute; top:16px; right:20px; background:none; border:none; color:#8b949e; font-size:26px; cursor:pointer;">&times;</button>
+    
+    <h2 id="rouletteModalTitle" style="font-size:1.6rem; color:#fff; margin-bottom:10px;">Открытие кейса</h2>
+    <p style="color:var(--text-dim); font-size:0.9rem;">Испытываем вашу удачу на прочность...</p>
+
+    <!-- КОНТЕЙНЕР БЕГУЩЕЙ ЛЕНТЫ -->
+    <div id="rouletteContainer" class="roulette-container">
+      <div class="roulette-pointer"></div>
+      <div id="rouletteTrack" class="roulette-track"></div>
+    </div>
+
+    <!-- РЕЗУЛЬТАТ ВЫИГРЫША -->
+    <div id="rouletteResult" class="roulette-result">
+      <h3 style="font-size:1.4rem; color:#4ade80; margin-bottom:14px;">🎉 ПОЗДРАВЛЯЕМ! ВАШ ВЫИГРЫШ:</h3>
+      
+      <div style="display:inline-block; background:rgba(0,0,0,0.4); border:2px solid var(--neon-green); border-radius:16px; padding:18px; margin-bottom:20px; box-shadow:var(--neon-green-glow);">
+        <img id="wonSkinImg" src="" alt="Won skin" style="width:140px; height:180px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
+        <h4 id="wonSkinTitle" style="font-size:1.2rem; color:#fff; font-weight:800;"></h4>
+        <p id="wonSkinDesc" style="color:var(--text-muted); font-size:0.85rem; max-width:260px; margin:0 auto;"></p>
+      </div>
+
+      <p id="wonSkinNote" style="color:#e6edf3; font-weight:600; margin-bottom:20px;"></p>
+
+      <div style="display:flex; justify-content:center; gap:14px;">
+        <a href="/profile" class="btn btn-primary">
+          📦 В мой инвентарь
+        </a>
+        <button type="button" onclick="closeRouletteModal()" class="btn btn-secondary">
+          Закрыть
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.ALL_SKINS = <%- JSON.stringify(allSkins || []) %>;
+</script>
+<script src="/js/case_roulette.js"></script>
+
+<%- include('partials/footer') %>

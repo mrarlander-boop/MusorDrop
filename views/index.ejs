@@ -1,0 +1,162 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="hero-text">
+      <span class="hero-tag">✨ Новое поколение маркетплейса</span>
+      <h1 class="hero-title">
+        Стильные скины для твоего <span>Minecraft</span>
+      </h1>
+      <p class="hero-subtitle">
+        Сотни уникальных скинов в HD качестве, анимированные рулетки кейсов и актуальные статьи. Скачивай .PNG файлы скинов в один клик и выделяйся на серверах!
+      </p>
+      <div class="hero-actions">
+        <a href="/skins" class="btn btn-primary btn-lg">
+          <span>👕</span> Перейти в каталог
+        </a>
+        <a href="/cases" class="btn btn-purple btn-lg">
+          <span>🎁</span> Открыть кейсы
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card-preview" style="transform: rotate(-6deg);">
+        <img src="https://images.unsplash.com/photo-1627856014754-2907e2355d54?w=400&auto=format&fit=crop&q=80" alt="Скин 1">
+        <span style="font-weight:700; font-size:0.8rem; color:#c084fc;">Незерит</span>
+      </div>
+      <div class="hero-card-preview" style="transform: rotate(4deg);">
+        <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400&auto=format&fit=crop&q=80" alt="Скин 2">
+        <span style="font-weight:700; font-size:0.8rem; color:#4ade80;">Кибер Стив</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- СЕКЦИЯ: ПОПУЛЯРНЫЕ СКИНИ -->
+  <section style="margin-bottom: 60px;">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>👕</span> Популярные скины
+      </h2>
+      <a href="/skins" class="btn btn-secondary btn-sm">Смотреть все &rarr;</a>
+    </div>
+
+    <div class="skins-grid">
+      <% if (featuredSkins && featuredSkins.length > 0) { %>
+        <% featuredSkins.forEach(skin => { %>
+          <% const isOwned = ownedSkinIds.includes(skin.id); %>
+          <div class="skin-card">
+            <% if (isOwned) { %>
+              <div class="skin-card-badge owned">✓ В инвентаре</div>
+            <% } %>
+
+            <div class="skin-card-img-wrapper">
+              <img src="<%= skin.image_url %>" alt="<%= skin.title %>" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&auto=format&fit=crop&q=80'">
+            </div>
+
+            <div class="skin-card-body">
+              <h3 class="skin-card-title"><%= skin.title %></h3>
+              <p class="skin-card-desc"><%= skin.description || 'Эксклюзивный образ для Minecraft.' %></p>
+
+              <div class="skin-card-footer">
+                <div class="skin-price">
+                  <span><%= skin.price %></span>
+                  <span style="font-size:0.9rem;">🟢</span>
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                  <a href="/skins/<%= skin.id %>" class="btn btn-secondary btn-sm">Инфо</a>
+
+                  <% if (isOwned) { %>
+                    <a href="<%= skin.skin_file_url %>" download="<%= skin.title %>_skin.png" class="btn btn-primary btn-sm" title="Скачать скин в формате .png">
+                      📥 Скачать
+                    </a>
+                  <% } else { %>
+                    <form action="/skins/<%= skin.id %>/buy" method="POST" style="margin:0;" data-title="<%= skin.title %>" data-price="<%= skin.price %>">
+                      <button type="submit" class="btn btn-primary btn-sm">
+                        Купить
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p style="color:var(--text-muted); grid-column:1/-1;">Скины пока не добавлены в каталог.</p>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- СЕКЦИЯ: КЕЙСЫ -->
+  <section style="margin-bottom: 60px;">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>🎁</span> Испытай удачу в кейсах
+      </h2>
+      <a href="/cases" class="btn btn-secondary btn-sm">Все кейсы &rarr;</a>
+    </div>
+
+    <div class="cases-grid">
+      <% if (cases && cases.length > 0) { %>
+        <% cases.forEach(c => { %>
+          <div class="case-card">
+            <img src="<%= c.image_url %>" alt="<%= c.title %>" class="case-image" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop&q=80'">
+            <h3 class="case-title"><%= c.title %></h3>
+            <p class="case-desc"><%= c.description %></p>
+
+            <div class="case-footer">
+              <div style="font-size:1.2rem; font-weight:800; color:#c084fc;">
+                <%= c.price %> 🟢
+              </div>
+              <a href="/cases" class="btn btn-purple btn-sm">
+                Открыть кейс
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- СЕКЦИЯ: БЛОГ И НОВОСТИ -->
+  <section>
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>📰</span> Свежие публикации блога
+      </h2>
+      <a href="/blog" class="btn btn-secondary btn-sm">Читать блог &rarr;</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
+      <% if (latestPosts && latestPosts.length > 0) { %>
+        <% latestPosts.forEach(post => { %>
+          <div class="post-card">
+            <div class="post-meta">
+              <span class="post-badge"><%= post.media_type.toUpperCase() %></span>
+              <span>Автор: <%= post.author_name || 'Admin' %></span>
+              <span>• <%= new Date(post.created_at).toLocaleDateString('ru-RU') %></span>
+            </div>
+            <h3 class="post-title" style="font-size:1.2rem;">
+              <a href="/blog/<%= post.id %>" style="color:inherit; text-decoration:none;">
+                <%= post.title %>
+              </a>
+            </h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">
+              <%= post.content %>
+            </p>
+            <a href="/blog/<%= post.id %>" style="color:var(--neon-blue); font-weight:700; text-decoration:none; font-size:0.9rem;">
+              Читать далее &rarr;
+            </a>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

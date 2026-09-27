@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<main class="main-content">
+  <div style="margin-bottom: 20px;">
+    <a href="/admin" style="color:var(--text-muted); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+      &larr; Вернуться в панель администратора
+    </a>
+  </div>
+
+  <div class="form-card" style="max-width: 750px;">
+    <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:8px; color:#fff;">
+      Создание публикации в блог
+    </h1>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:25px;">
+      Напишите новость, гайд или обзор. Вы можете прикрепить картинку, видеоролик или файл для скачивания.
+    </p>
+
+    <form action="/admin/posts/add" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title" class="form-label">Заголовок публикации *</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          required 
+          placeholder="Например: Обзор обновления 1.21 и новые скины"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="content" class="form-label">Текст статьи / новости *</label>
+        <textarea 
+          id="content" 
+          name="content" 
+          rows="8" 
+          class="form-control" 
+          required 
+          placeholder="Подробный текст статьи с инструкциями, ссылками или новостями..."
+        ></textarea>
+      </div>
+
+      <!-- ВЛОЖЕНИЕ МЕДИА -->
+      <div class="form-group">
+        <label class="form-label">Прикрепить медиа-файл (изображение, видео или документ)</label>
+        <div class="form-file-box">
+          <input type="file" id="media" name="media" style="display:none;">
+          <label for="media" style="cursor:pointer; display:block;">
+            <div style="font-size:32px; margin-bottom:6px;">📎</div>
+            <div style="font-weight:700; color:#fff;">Загрузить файл с устройства</div>
+            <div class="file-name-display" style="font-size:0.8rem; color:var(--text-dim); margin-top:4px;">
+              Поддерживаются: Картинки (PNG, JPG), Видео (MP4), Документы (TXT, ZIP, PDF)
+            </div>
+          </label>
+        </div>
+
+        <div style="margin-top:10px;">
+          <input 
+            type="url" 
+            name="media_url_input" 
+            placeholder="Или прямая ссылка на медиа в интернете (https://...)" 
+            class="form-control"
+          >
+        </div>
+        <div class="form-hint">Система автоматически определит тип вложения (видеоплеер, изображение или кнопка загрузки).</div>
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:30px;">
+        <button type="submit" class="btn btn-primary btn-lg" style="flex:1;">
+          Опубликовать в блоге
+        </button>
+        <a href="/admin" class="btn btn-secondary btn-lg">
+          Отмена
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

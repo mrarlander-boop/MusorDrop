@@ -1,0 +1,16 @@
+# Зависимости
+node_modules/
+package-lock.json
+
+# База данных SQLite (генерируется автоматически при старте server.js)
+database.sqlite
+database.sqlite-wal
+database.sqlite-shm
+
+# Логи и временные файлы
+*.log
+npm-debug.log*
+
+# Системные файлы
+.DS_Store
+Thumbs.db

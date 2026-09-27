@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <div style="margin-bottom: 20px;">
+    <a href="/skins" style="color:var(--text-muted); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+      &larr; Вернуться в каталог скинов
+    </a>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:40px; background:var(--bg-card); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:35px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+    
+    <!-- ПРЕВЬЮ СКИНА -->
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:100%; max-width:380px; height:420px; border-radius:16px; overflow:hidden; border:2px solid var(--border-color); background:#0c0f16; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
+        <img src="<%= skin.image_url %>" alt="<%= skin.title %>" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&auto=format&fit=crop&q=80'">
+      </div>
+
+      <div style="margin-top:20px; width:100%; max-width:380px; background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.05); text-align:center;">
+        <span style="color:var(--text-dim); font-size:0.85rem;">Формат скина:</span>
+        <strong style="color:var(--neon-green); margin-left:6px;">64x64 PNG (Java & Bedrock)</strong>
+      </div>
+    </div>
+
+    <!-- ИНФОРМАЦИЯ И ПОКУПКА -->
+    <div style="display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <span style="background:rgba(34,197,94,0.15); color:#4ade80; border:1px solid rgba(34,197,94,0.3); padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:700;">
+            Коллекционный скин
+          </span>
+          <span style="color:var(--text-dim); font-size:0.85rem;">
+            <%= new Date(skin.created_at).toLocaleDateString('ru-RU') %>
+          </span>
+        </div>
+
+        <h1 style="font-size:2.2rem; font-weight:900; margin-bottom:12px; color:#fff;">
+          <%= skin.title %>
+        </h1>
+
+        <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:20px;">
+          Создатель: <strong style="color:var(--text-main);"><%= skin.author_name || 'Официальный SkinHub' %></strong>
+        </p>
+
+        <div style="background:rgba(0,0,0,0.25); border-radius:12px; padding:20px; margin-bottom:25px; border:1px solid rgba(255,255,255,0.05);">
+          <h3 style="font-size:1rem; margin-bottom:8px; color:#e6edf3;">Описание:</h3>
+          <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.7;">
+            <%= skin.description || 'Детализированный скин с поддержкой внешних слоёв (шляпа, наплечники, мантия).' %>
+          </p>
+        </div>
+
+        <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:25px;">
+          <span style="color:var(--text-dim); font-size:1rem;">Стоимость:</span>
+          <span style="font-size:2rem; font-weight:900; color:var(--neon-green);">
+            <%= skin.price %> 🟢
+          </span>
+        </div>
+      </div>
+
+      <!-- КНОПКИ ДЕЙСТВИЯ -->
+      <div>
+        <% if (isOwned) { %>
+          <div style="background:rgba(34,197,94,0.1); border:1px solid var(--neon-green); border-radius:12px; padding:20px; text-align:center; margin-bottom:15px;">
+            <p style="color:#4ade80; font-weight:700; margin-bottom:12px;">
+              ✓ Этот скин уже находится в вашей личной коллекции!
+            </p>
+            <a href="<%= skin.skin_file_url %>" download="<%= skin.title %>_skin.png" class="btn btn-primary btn-lg btn-block">
+              📥 Скачать файл скина (.png)
+            </a>
+          </div>
+        <% } else { %>
+          <form action="/skins/<%= skin.id %>/buy" method="POST" data-title="<%= skin.title %>" data-price="<%= skin.price %>">
+            <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:1.15rem;">
+              💳 Купить за <%= skin.price %> 🟢
+            </button>
+          </form>
+        <% } %>
+
+        <div style="margin-top:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:15px; font-size:0.85rem; color:var(--text-dim);">
+          💡 <strong>Как применить скин:</strong> Скачайте .png &rarr; запустите лаунчер Minecraft &rarr; вкладка "Скины" &rarr; загрузите файл и наслаждайтесь игрой!
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>

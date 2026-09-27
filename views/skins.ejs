@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <div class="section-header" style="flex-wrap:wrap; gap:16px;">
+    <div>
+      <h1 class="section-title">
+        <span>👕</span> Каталог скинов Minecraft
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-top:4px;">
+        Выбирайте понравившийся образ и скачивайте готовый .png файл для лаунчера
+      </p>
+    </div>
+
+    <!-- ФОРМА ПОИСКА И СОРТИРОВКИ -->
+    <form action="/skins" method="GET" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <input 
+        type="text" 
+        name="q" 
+        value="<%= searchQuery %>" 
+        placeholder="Поиск по названию..." 
+        class="form-control" 
+        style="width:240px; padding:8px 14px; font-size:0.9rem;"
+      >
+      <select name="sort" class="form-control" style="width:180px; padding:8px 14px; font-size:0.9rem;" onchange="this.form.submit()">
+        <option value="newest" <%= currentSort === 'newest' ? 'selected' : '' %>>Сначала новые</option>
+        <option value="price_asc" <%= currentSort === 'price_asc' ? 'selected' : '' %>>Сначала дешевле</option>
+        <option value="price_desc" <%= currentSort === 'price_desc' ? 'selected' : '' %>>Сначала дороже</option>
+      </select>
+      <button type="submit" class="btn btn-primary btn-sm">Найти</button>
+      <% if (searchQuery) { %>
+        <a href="/skins" class="btn btn-secondary btn-sm" title="Сбросить поиск">Сброс</a>
+      <% } %>
+    </form>
+  </div>
+
+  <div class="skins-grid">
+    <% if (skins && skins.length > 0) { %>
+      <% skins.forEach(skin => { %>
+        <% const isOwned = ownedSkinIds.includes(skin.id); %>
+        <div class="skin-card">
+          <% if (isOwned) { %>
+            <div class="skin-card-badge owned">✓ В инвентаре</div>
+          <% } %>
+
+          <div class="skin-card-img-wrapper">
+            <img src="<%= skin.image_url %>" alt="<%= skin.title %>" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600&auto=format&fit=crop&q=80'">
+          </div>
+
+          <div class="skin-card-body">
+            <h3 class="skin-card-title"><%= skin.title %></h3>
+            <p class="skin-card-desc"><%= skin.description || 'Качественный скин Minecraft.' %></p>
+
+            <div class="skin-card-footer">
+              <div class="skin-price">
+                <span><%= skin.price %></span>
+                <span style="font-size:0.9rem;">🟢</span>
+              </div>
+
+              <div style="display:flex; gap:8px;">
+                <a href="/skins/<%= skin.id %>" class="btn btn-secondary btn-sm">Инфо</a>
+
+                <% if (isOwned) { %>
+                  <a href="<%= skin.skin_file_url %>" download="<%= skin.title %>_skin.png" class="btn btn-primary btn-sm" title="Скачать .png">
+                    📥 Скачать
+                  </a>
+                <% } else { %>
+                  <form action="/skins/<%= skin.id %>/buy" method="POST" style="margin:0;" data-title="<%= skin.title %>" data-price="<%= skin.price %>">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                      Купить
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div style="grid-column: 1 / -1; text-align:center; padding:60px 20px; background:var(--bg-card); border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <h3 style="margin-bottom:10px;">Ничего не найдено</h3>
+        <p style="color:var(--text-muted); margin-bottom:20px;">По вашему запросу скинов не обнаружено.</p>
+        <a href="/skins" class="btn btn-secondary btn-sm">Сбросить фильтры</a>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

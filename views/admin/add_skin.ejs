@@ -1,0 +1,107 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<main class="main-content">
+  <div style="margin-bottom: 20px;">
+    <a href="/admin" style="color:var(--text-muted); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+      &larr; Вернуться в панель администратора
+    </a>
+  </div>
+
+  <div class="form-card" style="max-width: 700px;">
+    <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:8px; color:#fff;">
+      Добавление нового скина
+    </h1>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:25px;">
+      Загрузите превью и файл скина в формате .png для каталога Minecraft
+    </p>
+
+    <form action="/admin/skins/add" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title" class="form-label">Название скина *</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          required 
+          placeholder="Например: Незеритовый Самурай"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="price" class="form-label">Стоимость (в изумрудах/монетах) *</label>
+        <input 
+          type="number" 
+          id="price" 
+          name="price" 
+          class="form-control" 
+          required 
+          min="0" 
+          value="250"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Описание скина</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="3" 
+          class="form-control" 
+          placeholder="Краткое описание деталей скина..."
+        ></textarea>
+      </div>
+
+      <!-- ЗАГРУЗКА ПРЕВЬЮ -->
+      <div class="form-group">
+        <label class="form-label">Картинка-превью (для каталога)</label>
+        <div class="form-file-box">
+          <input type="file" id="image" name="image" accept="image/*" style="display:none;">
+          <label for="image" style="cursor:pointer; display:block;">
+            <div style="font-size:32px; margin-bottom:6px;">🖼️</div>
+            <div style="font-weight:700; color:#fff;">Выберите изображение превью</div>
+            <div class="file-name-display" style="font-size:0.8rem; color:var(--text-dim); margin-top:4px;">
+              PNG, JPG, WEBP (или укажите ссылку ниже)
+            </div>
+          </label>
+        </div>
+        <div style="margin-top:10px;">
+          <input 
+            type="url" 
+            name="preview_url" 
+            placeholder="Или вставьте URL ссылки на изображение" 
+            class="form-control"
+          >
+        </div>
+      </div>
+
+      <!-- ЗАГРУЗКА .PNG ФАЙЛА СКИНА ДЛЯ ИГРЫ -->
+      <div class="form-group">
+        <label class="form-label">Файл скина для лаунчера (.png, 64x64) *</label>
+        <div class="form-file-box">
+          <input type="file" id="skin_file" name="skin_file" accept=".png,image/png" style="display:none;">
+          <label for="skin_file" style="cursor:pointer; display:block;">
+            <div style="font-size:32px; margin-bottom:6px;">👕</div>
+            <div style="font-weight:700; color:#fff;">Загрузите .PNG файл скина</div>
+            <div class="file-name-display" style="font-size:0.8rem; color:var(--text-dim); margin-top:4px;">
+              Файл, который игрок будет скачивать и ставить в игру (если не выбран, будет использован стандартный)
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:30px;">
+        <button type="submit" class="btn btn-primary btn-lg" style="flex:1;">
+          Добавить скин
+        </button>
+        <a href="/admin" class="btn btn-secondary btn-lg">
+          Отмена
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

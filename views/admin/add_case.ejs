@@ -1,0 +1,113 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<main class="main-content">
+  <div style="margin-bottom: 20px;">
+    <a href="/admin" style="color:var(--text-muted); text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+      &larr; Вернуться в панель администратора
+    </a>
+  </div>
+
+  <div class="form-card" style="max-width: 700px;">
+    <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:8px; color:#fff;">
+      Создание нового кейса
+    </h1>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:25px;">
+      Настройте сундук со скинами, стоимость и выберите скины для дропа
+    </p>
+
+    <form action="/admin/cases/add" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title" class="form-label">Название кейса *</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form-control" 
+          required 
+          placeholder="Например: Незеритовый Сундук"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="price" class="form-label">Стоимость открытия (в монетах) *</label>
+        <input 
+          type="number" 
+          id="price" 
+          name="price" 
+          class="form-control" 
+          required 
+          min="1" 
+          value="200"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Описание кейса</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="2" 
+          class="form-control" 
+          placeholder="Какое описание увидят игроки..."
+        ></textarea>
+      </div>
+
+      <!-- ИКОНКА КЕЙСА -->
+      <div class="form-group">
+        <label class="form-label">Иконка кейса</label>
+        <div class="form-file-box">
+          <input type="file" id="image" name="image" accept="image/*" style="display:none;">
+          <label for="image" style="cursor:pointer; display:block;">
+            <div style="font-size:32px; margin-bottom:6px;">🎁</div>
+            <div style="font-weight:700; color:#fff;">Выберите изображение кейса</div>
+            <div class="file-name-display" style="font-size:0.8rem; color:var(--text-dim); margin-top:4px;">
+              PNG, JPG, WEBP (или укажите ссылку ниже)
+            </div>
+          </label>
+        </div>
+        <div style="margin-top:10px;">
+          <input 
+            type="url" 
+            name="image_url" 
+            placeholder="Или ссылка на изображение (https://...)" 
+            class="form-control"
+          >
+        </div>
+      </div>
+
+      <!-- ВЫБОР СКИНОВ ДЛЯ ДРОПА -->
+      <div class="form-group">
+        <label class="form-label">Скины, которые могут выпасть из этого кейса:</label>
+        <div style="max-height:220px; overflow-y:auto; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px;">
+          <% if (skins && skins.length > 0) { %>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <% skins.forEach(skin => { %>
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:6px; border-radius:6px; background:rgba(255,255,255,0.02);">
+                  <input type="checkbox" name="items" value="<%= skin.id %>" checked style="accent-color:var(--neon-purple); width:18px; height:18px;">
+                  <img src="<%= skin.image_url %>" alt="<%= skin.title %>" style="width:28px; height:28px; border-radius:4px; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100&auto=format&fit=crop&q=80'">
+                  <span style="font-size:0.85rem; color:#e6edf3;"><%= skin.title %></span>
+                </label>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p style="color:var(--text-dim); font-size:0.85rem;">Сначала создайте скины в каталоге.</p>
+          <% } %>
+        </div>
+        <div class="form-hint">Отметьте галочками скины, которые будут участвовать в рулетке этого кейса.</div>
+      </div>
+
+      <div style="display:flex; gap:14px; margin-top:30px;">
+        <button type="submit" class="btn btn-purple btn-lg" style="flex:1;">
+          Создать кейс
+        </button>
+        <a href="/admin" class="btn btn-secondary btn-lg">
+          Отмена
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

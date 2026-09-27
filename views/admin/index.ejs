@@ -1,0 +1,229 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<main class="main-content">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">
+        <span style="color:var(--neon-purple);">⚡</span> Панель администратора
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-top:4px;">
+        Управление каталогом скинов, кейсами, блогом и контентом маркетплейса
+      </p>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="/admin/skins/add" class="btn btn-primary btn-sm">
+        + Добавить скин
+      </a>
+      <a href="/admin/cases/add" class="btn btn-purple btn-sm">
+        + Добавить кейс
+      </a>
+      <a href="/admin/posts/add" class="btn btn-secondary btn-sm">
+        + Создать публикацию
+      </a>
+    </div>
+  </div>
+
+  <!-- КАРТОЧКИ СТАТИСТИКИ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(34,197,94,0.15); color:var(--neon-green);">👥</div>
+      <div>
+        <div class="stat-val"><%= stats.usersCount %></div>
+        <div class="stat-label">Пользователей</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(56,189,248,0.15); color:var(--neon-blue);">👕</div>
+      <div>
+        <div class="stat-val"><%= stats.skinsCount %></div>
+        <div class="stat-label">Скинов в каталоге</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(168,85,247,0.15); color:var(--neon-purple);">🎁</div>
+      <div>
+        <div class="stat-val"><%= stats.casesCount %></div>
+        <div class="stat-label">Активных кейсов</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(234,179,8,0.15); color:var(--neon-gold);">📰</div>
+      <div>
+        <div class="stat-val"><%= stats.postsCount %></div>
+        <div class="stat-label">Постов в блоге</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(239,68,68,0.15); color:var(--neon-red);">🛒</div>
+      <div>
+        <div class="stat-val"><%= stats.purchasesCount %></div>
+        <div class="stat-label">Всего покупок</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- УПРАВЛЕНИЕ СКИНами -->
+  <section style="margin-bottom: 45px;">
+    <div class="section-header">
+      <h2 style="font-size:1.3rem; font-weight:800; color:#fff;">Скины в маркетплейсе</h2>
+      <a href="/admin/skins/add" class="btn btn-primary btn-sm">+ Добавить скин</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Превью</th>
+            <th>Название</th>
+            <th>Стоимость</th>
+            <th>Файл скина</th>
+            <th>Дата</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (skins && skins.length > 0) { %>
+            <% skins.forEach(skin => { %>
+              <tr>
+                <td>#<%= skin.id %></td>
+                <td>
+                  <img src="<%= skin.image_url %>" alt="<%= skin.title %>" style="width:40px; height:40px; border-radius:6px; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=100&auto=format&fit=crop&q=80'">
+                </td>
+                <td><strong><%= skin.title %></strong></td>
+                <td style="color:var(--neon-green); font-weight:800;"><%= skin.price %> 🟢</td>
+                <td>
+                  <a href="<%= skin.skin_file_url %>" download style="color:var(--neon-blue); font-size:0.85rem; text-decoration:none;">
+                    📥 Скачать .png
+                  </a>
+                </td>
+                <td style="color:var(--text-dim); font-size:0.85rem;">
+                  <%= new Date(skin.created_at).toLocaleDateString('ru-RU') %>
+                </td>
+                <td>
+                  <form action="/admin/skins/<%= skin.id %>/delete" method="POST" style="margin:0;">
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="7" style="text-align:center; padding:20px; color:var(--text-dim);">Скинов пока нет</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- УПРАВЛЕНИЕ КЕЙСАМИ -->
+  <section style="margin-bottom: 45px;">
+    <div class="section-header">
+      <h2 style="font-size:1.3rem; font-weight:800; color:#fff;">Кейсы с рулеткой</h2>
+      <a href="/admin/cases/add" class="btn btn-purple btn-sm">+ Добавить кейс</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Иконка</th>
+            <th>Название</th>
+            <th>Стоимость открытия</th>
+            <th>Описание</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (cases && cases.length > 0) { %>
+            <% cases.forEach(c => { %>
+              <tr>
+                <td>#<%= c.id %></td>
+                <td>
+                  <img src="<%= c.image_url %>" alt="<%= c.title %>" style="width:40px; height:40px; border-radius:6px; object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100&auto=format&fit=crop&q=80'">
+                </td>
+                <td><strong><%= c.title %></strong></td>
+                <td style="color:#c084fc; font-weight:800;"><%= c.price %> 🟢</td>
+                <td style="color:var(--text-muted); font-size:0.85rem; max-width:300px;"><%= c.description %></td>
+                <td>
+                  <form action="/admin/cases/<%= c.id %>/delete" method="POST" style="margin:0;">
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-dim);">Кейсов пока нет</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- УПРАВЛЕНИЕ БЛОГОМ -->
+  <section>
+    <div class="section-header">
+      <h2 style="font-size:1.3rem; font-weight:800; color:#fff;">Публикации блога</h2>
+      <a href="/admin/posts/add" class="btn btn-secondary btn-sm">+ Создать публикацию</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Заголовок</th>
+            <th>Медиа</th>
+            <th>Тип медиа</th>
+            <th>Дата</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (posts && posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+              <tr>
+                <td>#<%= post.id %></td>
+                <td><strong><%= post.title %></strong></td>
+                <td>
+                  <% if (post.media_url) { %>
+                    <a href="<%= post.media_url %>" target="_blank" style="color:var(--neon-blue); font-size:0.85rem;">
+                      Открыть медиа
+                    </a>
+                  <% } else { %>
+                    <span style="color:var(--text-dim);">Нет</span>
+                  <% } %>
+                </td>
+                <td>
+                  <span style="font-size:0.75rem; background:rgba(255,255,255,0.08); padding:3px 8px; border-radius:4px;">
+                    <%= post.media_type %>
+                  </span>
+                </td>
+                <td style="color:var(--text-dim); font-size:0.85rem;">
+                  <%= new Date(post.created_at).toLocaleDateString('ru-RU') %>
+                </td>
+                <td>
+                  <form action="/admin/posts/<%= post.id %>/delete" method="POST" style="margin:0;">
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-dim);">Постов пока нет</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>

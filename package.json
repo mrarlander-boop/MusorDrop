@@ -1,0 +1,21 @@
+{
+  "name": "minecraft-marketplace",
+  "version": "1.0.0",
+  "description": "Minecraft Skins Marketplace & Blog with SQLite, Express, EJS, and Multer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.8.1"
+  },
+  "author": "Minecraft Dev",
+  "license": "ISC"
+}

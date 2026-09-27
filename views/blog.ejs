@@ -1,0 +1,74 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<%- include('partials/alerts') %>
+
+<main class="main-content">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">
+        <span>📰</span> Блог и статьи по Minecraft
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-top:4px;">
+        Гайды по установке скинов, обзоры обновлений игры и новости сообщества
+      </p>
+    </div>
+  </div>
+
+  <div class="posts-feed">
+    <% if (posts && posts.length > 0) { %>
+      <% posts.forEach(post => { %>
+        <article class="post-card">
+          <div class="post-meta">
+            <span class="post-badge"><%= post.media_type.toUpperCase() %></span>
+            <span>Автор: <strong style="color:#fff;"><%= post.author_name || 'Admin' %></strong></span>
+            <span>• <%= new Date(post.created_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+          </div>
+
+          <h2 class="post-title">
+            <a href="/blog/<%= post.id %>" style="color:inherit; text-decoration:none;">
+              <%= post.title %>
+            </a>
+          </h2>
+
+          <!-- ОТОБРАЖЕНИЕ ПРИКРЕПЛЕННЫХ МЕДИА-ФАЙЛОВ -->
+          <% if (post.media_url) { %>
+            <div class="post-media-container">
+              <% if (post.media_type === 'image') { %>
+                <img src="<%= post.media_url %>" alt="<%= post.title %>" class="post-media-img" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80'">
+              <% } else if (post.media_type === 'video') { %>
+                <video controls class="post-media-video">
+                  <source src="<%= post.media_url %>" type="video/mp4">
+                  Ваш браузер не поддерживает встроенное видео.
+                </video>
+              <% } else if (post.media_type === 'file') { %>
+                <div style="padding:20px;">
+                  <a href="<%= post.media_url %>" download class="post-file-download">
+                    <span>📄</span>
+                    <div>
+                      <div style="font-weight:700;">Прикрепленный документ / файл</div>
+                      <div style="font-size:0.8rem; color:var(--text-dim);">Нажмите для скачивания на устройство</div>
+                    </div>
+                  </a>
+                </div>
+              <% } %>
+            </div>
+          <% } %>
+
+          <p class="post-content">
+            <%= post.content %>
+          </p>
+
+          <div>
+            <a href="/blog/<%= post.id %>" class="btn btn-secondary btn-sm">
+              Подробнее о публикации &rarr;
+            </a>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p style="color:var(--text-muted);">Публикаций в блоге пока нет.</p>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
